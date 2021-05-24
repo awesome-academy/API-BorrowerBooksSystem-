@@ -1,0 +1,21 @@
+user:
+  name:
+    max_length: 50
+  email:
+    max_length: 100
+    regex: !ruby/regexp /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  password:
+    min_length: 6
+book:
+  title:
+    max_length: 100
+  author:
+    max_length: 50
+  amount:
+    min: 0
+category:
+  name:
+    max_length: 50
+request:
+  amount:
+    min: 1

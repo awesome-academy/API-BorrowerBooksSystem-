@@ -30,17 +30,17 @@ end
   Book.create! title: title,
                author: author,
                description: description,
-               amount: rand(10..100),
+               amount: rand(50..100),
                category: Category.all.sample
 end
 
 # Generate requests.
 100.times do
   start_date = Faker::Date.between(from: Date.today, to: Date.today + 1.month)
-  end_date = Faker::Date.between(from: start_date, to: start_date + 1.month)
+  end_date = Faker::Date.between(from: start_date + 1.day, to: start_date + 1.month)
   Request.create! start_date: start_date,
                   end_date: end_date,
-                  amount: rand(1...10),
+                  amount: rand(1...5),
                   status: rand(0..4),
                   user: User.all.sample,
                   book: Book.all.sample

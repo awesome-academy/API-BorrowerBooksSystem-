@@ -1,0 +1,25 @@
+vi:
+  activerecord:
+    models:
+      user: "Người dùng"
+      book: "Sách"
+      category: "Thể loại"
+      request: "Yêu cầu"
+    attributes:
+      user:
+        name: "Tên"
+        email: "Email"
+        password: "Mật khẩu"
+        role: "Vai trò"
+      book:
+        title: "Tiêu đề"
+        author: "Tác giả"
+        description: "Miêu tả"
+        amount: "Số lượng"
+      category:
+        name: "Tên"
+      request:
+        start_date: "Ngày bắt đầu"
+        end_date: "Ngày kết thúc"
+        status: "Trạng thái"
+        amount: "Số lượng"
