@@ -9,6 +9,7 @@ gem "bootsnap", ">= 1.4.4", require: false
 gem "config"
 gem "jwt"
 gem "mysql2", "~> 0.5"
+gem "paranoia", "~> 2.2"
 gem "puma", "~> 5.0"
 gem "rails", "~> 6.1.3", ">= 6.1.3.1"
 gem "rails-i18n"

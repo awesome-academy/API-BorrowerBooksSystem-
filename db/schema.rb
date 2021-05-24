@@ -10,14 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_21_070230) do
+ActiveRecord::Schema.define(version: 2021_05_24_042918) do
 
   create_table "book_followers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "book_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
     t.index ["book_id"], name: "index_book_followers_on_book_id"
+    t.index ["deleted_at"], name: "index_book_followers_on_deleted_at"
     t.index ["user_id"], name: "index_book_followers_on_user_id"
   end
 
@@ -29,7 +31,9 @@ ActiveRecord::Schema.define(version: 2021_05_21_070230) do
     t.bigint "category_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
     t.index ["category_id"], name: "index_books_on_category_id"
+    t.index ["deleted_at"], name: "index_books_on_deleted_at"
   end
 
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -37,6 +41,8 @@ ActiveRecord::Schema.define(version: 2021_05_21_070230) do
     t.integer "parent_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_categories_on_deleted_at"
   end
 
   create_table "requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -48,7 +54,9 @@ ActiveRecord::Schema.define(version: 2021_05_21_070230) do
     t.bigint "book_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
     t.index ["book_id"], name: "index_requests_on_book_id"
+    t.index ["deleted_at"], name: "index_requests_on_deleted_at"
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
@@ -59,6 +67,8 @@ ActiveRecord::Schema.define(version: 2021_05_21_070230) do
     t.integer "role", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
