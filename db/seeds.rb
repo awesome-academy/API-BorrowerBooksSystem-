@@ -1,7 +1,55 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+# Create a admin user.
+User.create! name: "Admin",
+             email: "admin@gmail.com",
+             password: "123123",
+             password_confirmation: "123123",
+             role: User.roles[:admin]
+
+# Generate users.
+20.times do |n|
+  name = Faker::Name.name
+  email = "user-#{n+1}@gmail.com"
+  password = "123123"
+  User.create! name: name,
+               email: email,
+               password: password,
+               password_confirmation: password
+end
+
+# Generate categories.
+10.times do
+  name = Faker::Lorem.sentence(word_count: 2)
+  Category.create! name: name
+end
+
+# Generate books.
+50.times do
+  title = Faker::Book.title
+  author = Faker::Book.author
+  description = Faker::Lorem.sentence(word_count: 5)
+  Book.create! title: title,
+               author: author,
+               description: description,
+               amount: rand(10..100),
+               category: Category.all.sample
+end
+
+# Generate requests.
+100.times do
+  start_date = Faker::Date.between(from: Date.today, to: Date.today + 1.month)
+  end_date = Faker::Date.between(from: start_date, to: start_date + 1.month)
+  Request.create! start_date: start_date,
+                  end_date: end_date,
+                  amount: rand(1...10),
+                  status: rand(0..4),
+                  user: User.all.sample,
+                  book: Book.all.sample
+end
+
+# Generate book followers.
+User.take(7).each do |user|
+  10.times do
+    BookFollower.create! user: user,
+                         book: Book.all.sample
+  end
+end
