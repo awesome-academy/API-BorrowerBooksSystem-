@@ -6,8 +6,12 @@ RSpec.describe Request, type: :model do
       should belong_to(:user)
     end
 
-    it "belong to book" do
-      should belong_to(:book)
+    it "has many request books" do
+      should have_many(:request_books).dependent(:destroy)
+    end
+
+    it "has many books through request books" do
+      should have_many(:books).through(:request_books).source(:book).dependent(:destroy)
     end
   end
 
@@ -16,12 +20,6 @@ RSpec.describe Request, type: :model do
   end
 
   describe "Validations" do
-    context "validates amount attribute" do
-      it { should validate_presence_of(:amount) }
-      it { should validate_numericality_of(:amount).only_integer }
-      it { should validate_numericality_of(:amount).is_greater_than_or_equal_to(Settings.request.amount.min) }
-    end
-
     context "validates start_date attribute" do
       it { should validate_presence_of(:start_date) }
     end
@@ -30,9 +28,8 @@ RSpec.describe Request, type: :model do
       it { should validate_presence_of(:end_date) }
     end
 
-    let(:user) {FactoryBot.create :user}
     let(:book) {FactoryBot.create :book, category: FactoryBot.create(:category)}
-    let(:request) {FactoryBot.create :request, user: user, book: book}
+    let(:request) {FactoryBot.create :request, user: FactoryBot.create(:user)}
     context "when valid" do
       it "have a valid data" do
         expect(request).to be_valid
@@ -48,14 +45,6 @@ RSpec.describe Request, type: :model do
       it "end date before start date" do
         request.update(end_date: request.start_date - 1.day)
         expect(request.errors[:end_date]).to include(I18n.t("request.errors.end_date_before_start_date"))
-      end
-    end
-
-    context "when invalid amount" do
-      it "greater number books remaining" do
-        number_books_remaining = request.book.amount - request.book.requests.approved.sum(:amount)
-        request.update(amount: number_books_remaining + 1)
-        expect(request.errors[:amount]).to include(I18n.t("request.errors.amount", number: number_books_remaining))
       end
     end
   end

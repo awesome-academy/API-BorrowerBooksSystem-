@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_24_042918) do
+ActiveRecord::Schema.define(version: 2021_05_25_073122) do
 
   create_table "book_followers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -45,17 +45,26 @@ ActiveRecord::Schema.define(version: 2021_05_24_042918) do
     t.index ["deleted_at"], name: "index_categories_on_deleted_at"
   end
 
-  create_table "requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.date "start_date", null: false
-    t.date "end_date", null: false
-    t.integer "status", default: 0
+  create_table "request_books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "amount", null: false
-    t.bigint "user_id", null: false
+    t.bigint "request_id", null: false
     t.bigint "book_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
-    t.index ["book_id"], name: "index_requests_on_book_id"
+    t.index ["book_id"], name: "index_request_books_on_book_id"
+    t.index ["deleted_at"], name: "index_request_books_on_deleted_at"
+    t.index ["request_id"], name: "index_request_books_on_request_id"
+  end
+
+  create_table "requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.integer "status", default: 0
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_requests_on_deleted_at"
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
@@ -75,6 +84,7 @@ ActiveRecord::Schema.define(version: 2021_05_24_042918) do
   add_foreign_key "book_followers", "books"
   add_foreign_key "book_followers", "users"
   add_foreign_key "books", "categories"
-  add_foreign_key "requests", "books"
+  add_foreign_key "request_books", "books"
+  add_foreign_key "request_books", "requests"
   add_foreign_key "requests", "users"
 end
