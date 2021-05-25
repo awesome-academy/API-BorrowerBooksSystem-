@@ -1,0 +1,6 @@
+vi:
+  request:
+    errors:
+      start_date_before_today: "phải sau ngày hôm nay"
+      end_date_before_start_date: "phải sau ngày bắt đầu"
+      amount: "chỉ còn %{number} cuốn sách"
