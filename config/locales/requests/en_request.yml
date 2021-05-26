@@ -3,4 +3,4 @@ en:
     errors:
       start_date_before_today: "must be after today"
       end_date_before_start_date: "must be after start date"
-      amount: "only %{number} books left"
+      amount: "%{book} only %{number} books left"

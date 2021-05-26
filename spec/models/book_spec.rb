@@ -39,9 +39,10 @@ RSpec.describe Book, type: :model do
 
   describe "#books_borrowed" do
     let(:book) {FactoryBot.create :book, category: FactoryBot.create(:category)}
-    let(:request) {FactoryBot.create :request, user: FactoryBot.create(:user), status: Request.statuses[:approved]}
+    let(:request) {FactoryBot.create :request, user: FactoryBot.create(:user),
+                  status: Request.statuses[:approved], request_books_attributes: [{book: book, amount: 10}]}
     it "returns number of books borrowed " do
-      FactoryBot.create :request_book, request: request, book: book, amount: 10
+      request
       expect(Book.books_borrowed(book)).to eq 10
     end
   end

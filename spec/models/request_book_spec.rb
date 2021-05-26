@@ -19,13 +19,13 @@ RSpec.describe RequestBook, type: :model do
     end
 
     let(:book) {FactoryBot.create :book, category: FactoryBot.create(:category)}
-    let(:request) {FactoryBot.create :request, user: FactoryBot.create(:user)}
+    let(:request) {FactoryBot.create :request, user: FactoryBot.create(:user), request_books_attributes: [{book: book, amount: 10}]}
     context "when invalid amount" do
       it "greater number books remaining" do
-        request_book = FactoryBot.create :request_book, request: request, book: book, amount: 10
+        request_book = request.request_books.first
         books_remaining = request_book.book.amount - Book.books_borrowed(book)
         request_book.update(amount: books_remaining + 1)
-        expect(request_book.errors[:amount]).to include(I18n.t("request.errors.amount", number: books_remaining))
+        expect(request_book.errors[:amount]).to include(I18n.t("request.errors.amount", book: book.title, number: books_remaining))
       end
     end
   end

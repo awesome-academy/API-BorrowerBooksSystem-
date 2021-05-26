@@ -34,23 +34,19 @@ end
                category: Category.all.sample
 end
 
-# Generate requests.
+# Generate requests and request books.
 100.times do
   start_date = Faker::Date.between(from: Date.today, to: Date.today + 1.month)
   end_date = Faker::Date.between(from: start_date + 1.day, to: start_date + 1.month)
+  request_books = Array.new
+  rand(1..5).times do
+    request_books << {book: Book.all.sample, amount: rand(1..5)}
+  end
   Request.create! start_date: start_date,
                   end_date: end_date,
                   status: rand(0..4),
-                  user: User.all.sample
-end
-
-# Generate request book.
-Request.all.each do |request|
-  rand(1..5).times do
-    RequestBook.create! amount: rand(1..5),
-                        request: request,
-                        book: Book.all.sample
-  end
+                  user: User.all.sample,
+                  request_books_attributes: request_books
 end
 
 # Generate book followers.
