@@ -40,10 +40,17 @@ end
   end_date = Faker::Date.between(from: start_date + 1.day, to: start_date + 1.month)
   Request.create! start_date: start_date,
                   end_date: end_date,
-                  amount: rand(1...5),
                   status: rand(0..4),
-                  user: User.all.sample,
-                  book: Book.all.sample
+                  user: User.all.sample
+end
+
+# Generate request book.
+Request.all.each do |request|
+  rand(1..5).times do
+    RequestBook.create! amount: rand(1..5),
+                        request: request,
+                        book: Book.all.sample
+  end
 end
 
 # Generate book followers.

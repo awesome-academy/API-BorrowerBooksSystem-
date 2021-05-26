@@ -6,8 +6,8 @@ RSpec.describe Book, type: :model do
       should belong_to(:category)
     end
 
-    it "has many requests" do
-      should have_many(:requests).dependent(:destroy)
+    it "has many request books" do
+      should have_many(:request_books).dependent(:destroy)
     end
 
     it "has many book followers" do
@@ -34,6 +34,15 @@ RSpec.describe Book, type: :model do
       it { should validate_presence_of(:amount) }
       it { should validate_numericality_of(:amount).only_integer }
       it { should validate_numericality_of(:amount).is_greater_than_or_equal_to(Settings.book.amount.min) }
+    end
+  end
+
+  describe "#books_borrowed" do
+    let(:book) {FactoryBot.create :book, category: FactoryBot.create(:category)}
+    let(:request) {FactoryBot.create :request, user: FactoryBot.create(:user), status: Request.statuses[:approved]}
+    it "returns number of books borrowed " do
+      FactoryBot.create :request_book, request: request, book: book, amount: 10
+      expect(Book.books_borrowed(book)).to eq 10
     end
   end
 end
