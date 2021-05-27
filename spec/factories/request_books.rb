@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :request_book do
-    amount { amount {rand(1...10)} }
+    amount {rand(1...10)}
+    book {Book.first || association(:book)}
   end
 end
