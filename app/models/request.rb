@@ -6,7 +6,9 @@ class Request < ApplicationRecord
   has_many :books, through: :request_books,
             source: :book, dependent: :destroy
 
-  validates :start_date, :end_date, presence: true
+  accepts_nested_attributes_for :request_books
+
+  validates :start_date, :end_date, :request_books, presence: true
 
   validate :date_validation
 

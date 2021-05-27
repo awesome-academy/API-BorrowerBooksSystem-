@@ -19,6 +19,6 @@ class RequestBook < ApplicationRecord
     return if amount < books_remaining
 
     errors.add(:amount, I18n.t("request.errors.amount",
-                               number: books_remaining))
+                               book: book.title, number: books_remaining))
   end
 end
