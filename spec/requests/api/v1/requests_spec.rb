@@ -1,10 +1,25 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Requests", type: :request do
-  describe "POST #create" do
-    let!(:user) {FactoryBot.create :user}
-    let(:book) {FactoryBot.create :book}
+  let!(:user) {FactoryBot.create :user}
+  let(:book) {FactoryBot.create :book}
 
+  describe "GET #index" do
+    before :each do
+      FactoryBot.create :request
+      get api_v1_requests_path
+    end
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "JSON body response contains requests" do
+      expect(response.parsed_body["requests"].size).to eq(1)
+    end
+  end
+
+  describe "POST #create" do
     context "when valid parameters" do
       before :each do
         valid_params = {request: {start_date: Date.today, end_date: Date.today + 1.day,

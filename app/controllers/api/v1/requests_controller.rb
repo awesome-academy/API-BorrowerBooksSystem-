@@ -1,4 +1,11 @@
 class Api::V1::RequestsController < ApplicationController
+  def index
+    @requests = User.all.sample.requests
+                    .includes(request_books: {book: :category}).order_by_created
+    @requests = paginate @requests
+    render json: @requests, meta: pagination_meta(@requests)
+  end
+
   def create
     @request = User.all.sample.requests.new request_params
     if @request.save
@@ -11,7 +18,6 @@ class Api::V1::RequestsController < ApplicationController
   end
 
   private
-
   def request_params
     params.require(:request)
           .permit(:start_date, :end_date,

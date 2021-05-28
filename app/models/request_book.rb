@@ -8,7 +8,7 @@ class RequestBook < ApplicationRecord
     numericality: {only_integer: true,
                    greater_than_or_equal_to: Settings.request.amount.min}
 
-  validate :amount_validation, if: -> {book.present? && amount.present?}
+  validate :amount_validation, if: ->{book.present? && amount.present?}
   validate :book_validation
 
   private

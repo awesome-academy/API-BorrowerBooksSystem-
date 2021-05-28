@@ -252,13 +252,14 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    will_paginate (3.1.8)
     zeitwerk (2.4.2)
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  active_model_serializers
+  active_model_serializers (~> 0.10.0)
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.4)
   byebug
@@ -282,6 +283,7 @@ DEPENDENCIES
   simplecov-rcov
   spring
   tzinfo-data
+  will_paginate (= 3.1.8)
 
 RUBY VERSION
    ruby 2.7.0p0

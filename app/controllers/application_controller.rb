@@ -15,4 +15,22 @@ class ApplicationController < ActionController::API
                     I18n.default_locale
                   end
   end
+
+  def pagination_meta collection
+    return unless collection
+
+    {
+      per_page: collection.per_page,
+      current_page: collection.current_page,
+      next_page: collection.next_page,
+      previous_page: collection.previous_page,
+      total_pages: collection.total_pages,
+      total_entries: collection.total_entries
+    }
+  end
+
+  def paginate collection
+    collection.paginate(page: params[:page],
+      per_page: params[:per_page] || Settings.paginate.per_page)
+  end
 end
