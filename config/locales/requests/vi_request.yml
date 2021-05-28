@@ -1,6 +1,10 @@
 vi:
   request:
+    message:
+      create_success: "Tạo yêu cầu thành công"
     errors:
       start_date_before_today: "phải sau ngày hôm nay"
       end_date_before_start_date: "phải sau ngày bắt đầu"
       amount: "%{book} chỉ còn %{number} cuốn sách"
+      book:
+        required: "Sách có id: %{id} không tồn tại"

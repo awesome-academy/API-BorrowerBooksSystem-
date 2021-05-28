@@ -18,14 +18,21 @@ RSpec.describe RequestBook, type: :model do
       it { should validate_numericality_of(:amount).is_greater_than_or_equal_to(Settings.request.amount.min) }
     end
 
-    let(:book) {FactoryBot.create :book, category: FactoryBot.create(:category)}
-    let(:request) {FactoryBot.create :request, user: FactoryBot.create(:user), request_books_attributes: [{book: book, amount: 10}]}
+    let(:request) {FactoryBot.create :request}
     context "when invalid amount" do
       it "greater number books remaining" do
         request_book = request.request_books.first
-        books_remaining = request_book.book.amount - Book.books_borrowed(book)
+        books_remaining = request_book.book.amount - Book.books_borrowed(request_book.book)
         request_book.update(amount: books_remaining + 1)
-        expect(request_book.errors[:amount]).to include(I18n.t("request.errors.amount", book: book.title, number: books_remaining))
+        expect(request_book.errors[:amount]).to include(I18n.t("request.errors.amount", book: request_book.book.title, number: books_remaining))
+      end
+    end
+
+    context "when invalid book" do
+      it "book don't exist" do
+        request_book = request.request_books.first
+        request_book.update(book_id: Book.last.id + 1)
+        expect(request_book.errors[:book]).to include(I18n.t("request.errors.book.required", id: request_book.book_id))
       end
     end
   end

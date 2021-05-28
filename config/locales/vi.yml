@@ -23,3 +23,9 @@ vi:
         end_date: "Ngày kết thúc"
         status: "Trạng thái"
         amount: "Số lượng"
+    errors:
+      models:
+        request_book:
+          attributes:
+            book:
+              required: "Sách không tồn tại"

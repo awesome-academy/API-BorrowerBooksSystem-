@@ -32,8 +32,7 @@ RSpec.describe Request, type: :model do
       it { should validate_presence_of(:request_books) }
     end
 
-    let(:book) {FactoryBot.create :book, category: FactoryBot.create(:category)}
-    let(:request) {FactoryBot.create :request, user: FactoryBot.create(:user), request_books_attributes: [{book: book, amount: 10}]}
+    let(:request) {FactoryBot.create :request}
     context "when valid" do
       it "have a valid data" do
         expect(request).to be_valid

@@ -1,6 +1,10 @@
 en:
   request:
+    message:
+      create_success: "Create request success"
     errors:
       start_date_before_today: "must be after today"
       end_date_before_start_date: "must be after start date"
       amount: "%{book} only %{number} books left"
+      book:
+        required: "Books has id: %{id} don't exist"

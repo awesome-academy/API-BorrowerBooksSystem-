@@ -23,3 +23,9 @@ en:
         end_date: "End date"
         status: "Status"
         amount: "Amount"
+    errors:
+      models:
+        request_book:
+          attributes:
+            book:
+              required: "Books don't exist"
