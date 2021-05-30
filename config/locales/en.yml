@@ -29,3 +29,6 @@ en:
           attributes:
             book:
               required: "Books don't exist"
+  errors:
+    date: "%{name} invalid (Format: dd/mm/YYYY)"
+    date_range: "date range invalid: %{name1} must lester %{name2}"
