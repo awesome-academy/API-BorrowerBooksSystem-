@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Api::V1::Requests", type: :request do
   let!(:user) {FactoryBot.create :user}
   let(:book) {FactoryBot.create :book}
-
+  # let(:)
   describe "GET #index" do
     before :each do
       FactoryBot.create :request
@@ -73,6 +73,59 @@ RSpec.describe "Api::V1::Requests", type: :request do
 
       it "has amount errors message" do
         expect(response.parsed_body["request_books.amount"]).to eq(@request_clone.errors[:"request_books.amount"])
+      end
+    end
+  end
+
+  describe "Get|Post #search" do
+    let(:request1) {FactoryBot.create :request}
+    let(:request2) {FactoryBot.create :request}
+
+    context "when valid params" do
+      after :each do
+        expect(response).to have_http_status(:success)
+        expect(response.parsed_body["requests"].size).to eq 1
+        expect(response.parsed_body["requests"][0]["id"]).to eq request1.id
+      end
+
+      context "search by status" do
+        it "render JSON response with request valid" do
+          request1.approved!
+          request2.cancel!
+          get search_api_v1_requests_path, params: {q: {status_eq: Request.statuses[:approved]}}
+        end
+      end
+
+      context "search by title book" do
+        it "render JSON response with request valid" do
+          Book.update_all(title: "test")
+          request1.request_books.first.book.update(title: "rspec")
+          get search_api_v1_requests_path, params: {q: {books_title_cont: "rspec"}}
+        end
+      end
+
+      context "search by created_at" do
+        it "render JSON response with request valid" do
+          request1.update(created_at: DateTime.parse("15-09-2019 15:09:19"))
+          request2.update(created_at: DateTime.parse("17-09-2019 15:09:19"))
+          get search_api_v1_requests_path, params: {q: {created_at_gteq: "14-09-2019", created_at_lteq: "16-09-2019"}}
+        end
+      end
+    end
+
+    context "when date range invalid" do
+      it "render JSON response with message errors" do
+        get search_api_v1_requests_path, params: {q: {created_at_gteq: "17-09-2019", created_at_lteq: "16-09-2019"}}
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.parsed_body["message"]).to eq(I18n.t("errors.date_range", name1: :created_at_gteq, name2: :created_at_gteq))
+      end
+    end
+
+    context "when date invalid" do
+      it "render JSON response with message errors" do
+        get search_api_v1_requests_path, params: {q: {created_at_gteq: "17-19-2019"}}
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.parsed_body["message"]).to eq(I18n.t("errors.date", name: :created_at_gteq))
       end
     end
   end

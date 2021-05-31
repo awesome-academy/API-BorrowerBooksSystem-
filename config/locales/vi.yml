@@ -29,3 +29,6 @@ vi:
           attributes:
             book:
               required: "Sách không tồn tại"
+  errors:
+    date: "%{name} không hợp lệ (Định dạng: dd/mm/YYYY)"
+    date_range: "Khoản ngày sai: %{name1} phải bé hơn %{name2}"

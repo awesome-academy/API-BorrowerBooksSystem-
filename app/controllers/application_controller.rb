@@ -33,4 +33,12 @@ class ApplicationController < ActionController::API
     collection.paginate(page: params[:page],
       per_page: params[:per_page] || Settings.paginate.per_page)
   end
+
+  def parse_date name, date
+    Date.parse date
+  rescue StandardError
+    handle_resonse(
+      {message: I18n.t("errors.date", name: name)}, :unprocessable_entity
+    )
+  end
 end
