@@ -19,3 +19,5 @@ category:
 request:
   amount:
     min: 1
+paginate:
+  per_page: 5

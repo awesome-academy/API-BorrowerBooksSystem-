@@ -14,6 +14,8 @@ class Request < ApplicationRecord
 
   enum status: {pending: 0, approved: 1, rejected: 2, paid: 3, cancel: 4}
 
+  scope :order_by_created, ->{order created_at: :desc}
+
   private
 
   def date_validation

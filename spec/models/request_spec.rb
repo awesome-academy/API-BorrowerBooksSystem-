@@ -51,4 +51,13 @@ RSpec.describe Request, type: :model do
       end
     end
   end
+
+  describe "#order_by_created" do
+    it "returns list requests order by create_at" do
+      user = FactoryBot.create :user
+      request1 = FactoryBot.create :request
+      request2 = FactoryBot.create :request
+      expect(Request.order_by_created).to eq [request2, request1]
+    end
+  end
 end
