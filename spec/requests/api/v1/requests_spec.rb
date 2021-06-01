@@ -1,13 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Requests", type: :request do
-  let!(:user) {FactoryBot.create :user}
+  let(:body_response) {JSON.parse response.body, symbolize_names: true}
   let(:book) {FactoryBot.create :book}
+
+  before :all do
+    user = FactoryBot.create :user
+    token = JsonWebToken.encode(user_id: user.id)
+    @auth_headers = {"Authorization": "Bearer #{token}"}
+  end
 
   describe "GET #index" do
     before :each do
       FactoryBot.create :request
-      get api_v1_requests_path
+      get api_v1_requests_path, headers: @auth_headers
     end
 
     it "returns http success" do
@@ -15,7 +21,7 @@ RSpec.describe "Api::V1::Requests", type: :request do
     end
 
     it "JSON body response contains requests" do
-      expect(response.parsed_body["requests"].size).to eq(1)
+      expect(body_response[:requests].size).to eq(1)
     end
   end
 
@@ -24,7 +30,7 @@ RSpec.describe "Api::V1::Requests", type: :request do
       before :each do
         valid_params = {request: {start_date: Date.today, end_date: Date.today + 1.day,
           request_books_attributes: [{book_id: book.id, amount: 1}, {book_id: book.id, amount: 2}]}}
-        post api_v1_requests_path, params: valid_params
+        post api_v1_requests_path, params: valid_params, headers: @auth_headers
       end
 
       it "create new request" do
@@ -37,7 +43,7 @@ RSpec.describe "Api::V1::Requests", type: :request do
       end
 
       it "render JSON response with message" do
-        expect(response.parsed_body["message"]).to eq(I18n.t("request.message.create_success"))
+        expect(body_response[:message]).to eq(I18n.t("request.message.create_success"))
       end
     end
 
@@ -45,7 +51,7 @@ RSpec.describe "Api::V1::Requests", type: :request do
       before :each do
         invalid_params = {request: {start_date: Date.today - 10.day, end_date: Date.today - 20.day,
           request_books_attributes: [{book_id: book.id, amount: book.amount + 1}, {book_id: Book.last.id + 1}]}}
-        post api_v1_requests_path, params: invalid_params
+        post api_v1_requests_path, params: invalid_params, headers: @auth_headers
         @request_clone = FactoryBot.build(:request, invalid_params[:request])
         @request_clone.valid?
       end
@@ -60,19 +66,19 @@ RSpec.describe "Api::V1::Requests", type: :request do
       end
 
       it "has start_date errors message" do
-        expect(response.parsed_body["start_date"]).to eq(@request_clone.errors[:start_date])
+        expect(body_response[:start_date]).to eq(@request_clone.errors[:start_date])
       end
 
       it "has end_date errors message" do
-        expect(response.parsed_body["end_date"]).to eq(@request_clone.errors[:end_date])
+        expect(body_response[:end_date]).to eq(@request_clone.errors[:end_date])
       end
 
       it "has book errors message" do
-        expect(response.parsed_body["request_books.book"]).to eq(@request_clone.errors[:"request_books.book"])
+        expect(body_response[:"request_books.book"]).to eq(@request_clone.errors[:"request_books.book"])
       end
 
       it "has amount errors message" do
-        expect(response.parsed_body["request_books.amount"]).to eq(@request_clone.errors[:"request_books.amount"])
+        expect(body_response[:"request_books.amount"]).to eq(@request_clone.errors[:"request_books.amount"])
       end
     end
   end
