@@ -29,3 +29,5 @@ en:
           attributes:
             book:
               required: "Books don't exist"
+  authenticate:
+    invalid: "Invalid email or password"

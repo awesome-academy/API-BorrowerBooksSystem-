@@ -1,13 +1,14 @@
 class Api::V1::RequestsController < ApplicationController
   def index
-    @requests = User.all.sample.requests
-                    .includes(request_books: {book: :category}).order_by_created
+    @requests = @current_user.requests
+                             .includes(request_books: {book: :category})
+                             .order_by_created
     @requests = paginate @requests
     render json: @requests, meta: pagination_meta(@requests)
   end
 
   def create
-    @request = User.all.sample.requests.new request_params
+    @request = @current_user.requests.new request_params
     if @request.save
       return handle_resonse(
         {message: I18n.t("request.message.create_success")}, :created

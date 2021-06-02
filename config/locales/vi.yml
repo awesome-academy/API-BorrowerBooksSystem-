@@ -29,3 +29,5 @@ vi:
           attributes:
             book:
               required: "Sách không tồn tại"
+  authenticate:
+    invalid: "Email hoặc mật khẩu không đúng"
